@@ -47,3 +47,36 @@ Read-only smoke + edge-case probe + `--selfcheck` health CLI for
 - **State touched.** None outside its files; bytes in-memory, tests use `tmp_path`.
 - **Uninstall.** Delete `tools/test_gap_cost_chart/` and
   `tests/test_cost_report_chart.py`; restores prior state exactly.
+
+---
+
+# skillcov — Reversibility
+
+`skillcov` is a **read-only static audit** that walks a skills directory tree and
+emits a coverage map (Markdown + optional JSON). It never modifies, creates,
+executes, or backfills any skill it scans — it only computes and reports.
+
+## Reversibility
+
+- **Off by default.** The tool does nothing unless explicitly invoked
+  (`python -m tools.skillcov --root ... --out ...`). It ships no cron job, no
+  launchd/systemd unit, no scheduler, hook, or daemon. It never runs on its own.
+- **Read-only over the scanned tree.** It opens skill files read-only and writes
+  ONLY to the single `--out` path you pass (and `<out>.json` when `--json` is
+  set). It never writes inside the scanned skills root. With no `--out`, it writes
+  the report to **stdout** only. Symlinks in the tree are not followed (no escape).
+- **No execution of scanned content.** Classification is by static inspection
+  only — file presence, glob, and frontmatter line-scanning. It never imports,
+  `exec`s, or subprocesses any discovered file. Scanned skills are treated as
+  untrusted data, not code.
+- **State it touches.** Only the `--out` path you choose (default under
+  `tools/skillcov/`). It touches no global config, no env, no home directory, and
+  makes no network calls. The report/JSON it writes are plain files.
+- **Uninstall / roll back.** Delete two files:
+  `tools/skillcov.py` and `tests/test_skillcov.py`. Nothing else was installed.
+  Any report or JSON sidecar you generated is a plain file; deleting it restores
+  the prior state exactly (no skill was ever altered).
+- **Deploy health probe.** `python -m tools.skillcov --selfcheck` returns `0` on a
+  known-good in-memory fixture and non-zero otherwise. It builds its fixture in a
+  temp dir it cleans up, mutates nothing else, so re-running or rolling back is
+  safe at any time.
