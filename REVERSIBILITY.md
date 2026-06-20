@@ -47,3 +47,35 @@ Read-only smoke + edge-case probe + `--selfcheck` health CLI for
 - **State touched.** None outside its files; bytes in-memory, tests use `tmp_path`.
 - **Uninstall.** Delete `tools/test_gap_cost_chart/` and
   `tests/test_cost_report_chart.py`; restores prior state exactly.
+
+---
+
+# docs_ace_index — Reversibility
+
+`docs_ace_index` is a **pure static-site renderer**. It reads a hand-maintained
+TOML manifest and emits one self-contained dark-mode `index.html`. It probes
+nothing, serves nothing, and runs on its own never.
+
+## Reversibility
+
+- **Off by default.** Does nothing unless explicitly invoked
+  (`python -m tools.docs_ace_index build` or `... --selfcheck`). Ships no cron
+  job, no launchd/systemd unit, no scheduler, no daemon, no server. It never
+  runs on its own.
+- **No network, ever.** Stdlib-only (`tomllib`, `html`, `argparse`, `pathlib`,
+  `sys`, `datetime`). It imports no `socket`, `urllib`, or `http.client`. The
+  listed URLs are rendered as inert text/links; v0.1 never fetches them.
+- **State it touches.** It reads `tools/docs_ace_index/manifest.toml` (or a
+  `--manifest` path) and writes one HTML file to the `--out` path (default
+  `index.html` beside the manifest). `--selfcheck` writes nothing. It touches no
+  global config, no env, no home directory, no network.
+- **Manifest is the trust boundary.** Every field is HTML-escaped before
+  insertion; a stray `<script>` in an entry renders as inert escaped text.
+- **Uninstall / roll back.** Delete the package dir
+  `tools/docs_ace_index/` and the suite `tests/test_docs_ace_index.py`. Nothing
+  else was installed. Any generated `index.html` is a plain file you can remove;
+  deleting it restores the prior state exactly.
+- **Deploy health probe.** `python -m tools.docs_ace_index --selfcheck` returns
+  `0` on the bundled `fixtures/known_good.toml` and non-zero on any failure
+  (corrupt/missing fixture). It mutates nothing, so re-running or rolling back is
+  safe at any time.

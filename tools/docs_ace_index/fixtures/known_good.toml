@@ -1,0 +1,19 @@
+# Frozen known-good fixture for --selfcheck. NOT the live manifest.
+# Editing/corrupting this file must flip --selfcheck non-zero.
+
+[[entry]]
+name = "selfcheck-live"
+url = "https://example.ace/live"
+status = "live"
+type = "page"
+owner = "Daedalus"
+generator = "fixture"
+tags = ["fixture", "live"]
+
+[[entry]]
+name = "selfcheck-broken"
+url = "https://example.ace/broken"
+status = "broken"
+type = "page"
+owner = "Daedalus"
+tags = ["fixture"]
