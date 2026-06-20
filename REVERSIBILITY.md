@@ -28,3 +28,22 @@ no repository or remote state.
 - **Deploy health probe.** `python -m tools.branch_janitor --selfcheck` returns `0`
   on known-good input and non-zero otherwise; it mutates nothing, so re-running or
   rolling back is safe at any time.
+
+---
+
+# cost_report_chart test probe — Reversibility
+
+Read-only smoke + edge-case probe + `--selfcheck` health CLI for
+`cost_report_chart.render()`. Authoritative copy:
+`tools/test_gap_cost_chart/REVERSIBILITY.md`.
+
+## Reversibility
+
+- **Off by default.** Runs only when explicitly invoked (`pytest
+  tests/test_cost_report_chart.py` or `python -m tools.test_gap_cost_chart.probe
+  --selfcheck`). No plugin, hook, cron, unit, or daemon.
+- **Read-only.** Imports + calls `cost_report_chart.render()` only; never mutates
+  `tokens-ace`. Stdlib reference renderer when the real module is absent.
+- **State touched.** None outside its files; bytes in-memory, tests use `tmp_path`.
+- **Uninstall.** Delete `tools/test_gap_cost_chart/` and
+  `tests/test_cost_report_chart.py`; restores prior state exactly.
