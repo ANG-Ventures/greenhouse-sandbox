@@ -1,0 +1,47 @@
+# docs.ace doc-portal manifest (live, hand-maintained source of truth).
+#
+# One array-of-tables. Required per entry: name, url.
+# Optional: status (live|planned|stale|broken; default planned), type, owner,
+# generator, tags. Status is DECLARED by a human, not probed (v0.1).
+
+[[entry]]
+name = "skills.ace"
+url = "https://skills.ace/"
+status = "live"
+type = "portal"
+owner = "Apollo"
+generator = "skillhub-export nightly"
+tags = ["skills", "fleet"]
+
+[[entry]]
+name = "docs.ace"
+url = "https://docs.ace/"
+status = "planned"
+type = "index"
+owner = "Daedalus"
+generator = "tools/docs_ace_index"
+tags = ["meta", "portal"]
+
+[[entry]]
+name = "kanban.ace"
+url = "https://kanban.ace/board"
+status = "live"
+type = "board"
+owner = "Apollo"
+tags = ["ops"]
+
+[[entry]]
+name = "metrics.ace"
+url = "https://metrics.ace/dashboards"
+status = "stale"
+type = "dashboard"
+owner = "Aegis"
+generator = "grafana provision"
+tags = ["observability"]
+
+[[entry]]
+name = "old-wiki.ace"
+url = "https://old-wiki.ace/"
+status = "broken"
+type = "wiki"
+tags = ["legacy", "archive"]
