@@ -1,0 +1,12 @@
+# branch-triage report (default=main, stale-days=90)
+# counts: merged=2 stale=1 active=2 total=5
+
+merged  2023-04-28T22:13:20Z cccccccccccc fix/old-merged
+merged  2023-11-04T22:13:20Z bbbbbbbbbbbb feature/done
+stale   2023-06-17T22:13:20Z dddddddddddd chore/stale-thing
+active  2023-11-09T22:13:20Z eeeeeeeeeeee feature/active-wip
+active  2023-11-13T22:13:20Z aaaaaaaaaaaa main
+
+# proposed cleanup (NOT executed -- run manually):
+#   git branch -D fix/old-merged
+#   git branch -D feature/done
