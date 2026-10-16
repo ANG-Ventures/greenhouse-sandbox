@@ -1,0 +1,8 @@
+name: budget-probe
+on:
+  pull_request:
+jobs:
+  probe:
+    runs-on: ubuntu-latest   # hosted-ok: PUBLIC repo, free; this probe proves the org $0 budget does not block free runs
+    steps:
+      - run: echo "free public run started at $(date -u)"
